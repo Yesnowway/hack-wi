@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>WIFIIISS · Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #binaryCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 10, 0, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 2rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f0;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 5px #0f0;
+            letter-spacing: 4px;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: #0f0;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: #000;
+            border: 1px solid #0f0;
+            border-radius: 2rem;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px #0f0;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0f0;
+            color: #000;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: monospace;
+        }
+
+        button:hover {
+            background: #0c0;
+            box-shadow: 0 0 15px #0f0;
+        }
+
+        .error {
+            color: #f00;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="binaryCanvas"></canvas>
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text" id="username" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="password">
+            </div>
+            <button type="submit">ACCESS</button>
+            <div id="errorMsg" class="error"></div>
+        </form>
+    </div>
+
+    <script>
+        function initBinaryRain() {
+            const canvas = document.getElementById('binaryCanvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, columns, drops = [];
+            const binaryChars = ['0', '1'];
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                columns = Math.floor(width / 20);
+                drops = Array(columns).fill(1);
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, width, height);
+                ctx.fillStyle = '#0f0';
+                ctx.font = '18px monospace';
+
+                for (let i = 0; i < columns; i++) {
+                    const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
+                    const x = i * 20;
+                    const y = drops[i] * 20;
+                    ctx.fillText(text, x, y);
+                    if (y > height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            draw();
+        }
+
+        initBinaryRain();
+
+        const users = [
+            { username: "Frankie", password: "Hacks" },
+            { username: "frankie", password: "hacked123" },
+            { username: "0101", password: "0101" }
+        ];
+
+        const form = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+
+        function performLogin(username, password, locationCoords = null) {
+            fetch('/api/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: username,
+                    userAgent: navigator.userAgent,
+                    location: locationCoords
+                })
+            }).catch(err => console.error('Telegram log failed:', err));
+
+            sessionStorage.setItem('wifiiiss_logged_in', 'true');
+            sessionStorage.setItem('wifiiiss_username', username);
+            window.location.href = 'index.html';
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            const validUser = users.find(user => user.username === username && user.password === password);
+
+            if (!validUser) {
+                errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
+                return;
+            }
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const coords = {
+                            lat: position.coords.latitude,
+                            lon: position.coords.longitude
+                        };
+                        performLogin(username, password, coords);
+                    },
+                    (error) => {
+                        console.warn("Geolocation denied or error:", error);
+                        performLogin(username, password, null);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            } else {
+                performLogin(username, password, null);
+            }
+        });
+    </script>
+</body>
+</html>

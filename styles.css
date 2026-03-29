@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    font-family: 'Courier New', 'Fira Code', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.8rem;
+    position: relative;
+    overflow-x: hidden;
+    /* Screenshot / selection blocking */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent image dragging (if any) */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+#binaryCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    width: 100%;
+    background: rgba(0, 10, 0, 0.75);
+    backdrop-filter: blur(3px);
+    border-radius: 1.5rem;
+    padding: 1.2rem;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 5px rgba(0, 255, 0, 0.3);
+    border: 1px solid #0f0;
+}
+
+.neon-title {
+    font-size: 2.5rem;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #0f0;
+    text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0;
+    animation: flicker 3s infinite alternate;
+}
+
+.subtitle {
+    text-align: center;
+    color: #8f8;
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.9; text-shadow: 0 0 2px #0f0; }
+    100% { opacity: 1; text-shadow: 0 0 12px #0f0, 0 0 25px #0f0; }
+}
+
+.search-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f0;
+    border-radius: 2rem;
+    color: #0f0;
+    font-family: monospace;
+    outline: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 5px #0f0;
+}
+
+#searchInput:focus {
+    box-shadow: 0 0 12px #0f0;
+    background: #000000aa;
+    border-color: #0f0;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #0f0;
+    pointer-events: none;
+}
+
+.places-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    padding: 0.3rem;
+}
+
+.place-item {
+    background: #0a1a0ab3;
+    backdrop-filter: blur(4px);
+    border-left: 4px solid #0f0;
+    padding: 0.6rem 1rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: #cfc;
+    transition: 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 255, 0, 0.2);
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+
+.place-item:hover {
+    background: #1f3a1f80;
+    border-left-color: #0f0;
+    transform: translateX(4px);
+    box-shadow: 0 0 10px #0f0;
+    color: #fff;
+}
+
+.location-panel {
+    background: #071007aa;
+    border-radius: 1.2rem;
+    padding: 0.8rem;
+    border: 1px solid #0f0;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+    backdrop-filter: blur(8px);
+}
+
+.location-panel h3 {
+    color: #0f0;
+    margin-bottom: 0.8rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    text-align: center;
+    text-shadow: 0 0 3px #0f0;
+}
+
+#locationInfo {
+    color: #afa;
+    font-size: 0.85rem;
+    font-family: monospace;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+#locationInfo strong {
+    font-size: 0.9rem;
+    color: #0f0;
+}
+
+.places-list::-webkit-scrollbar {
+    width: 4px;
+}
+.places-list::-webkit-scrollbar-track {
+    background: #0a1a0a;
+    border-radius: 8px;
+}
+.places-list::-webkit-scrollbar-thumb {
+    background: #0f0;
+    border-radius: 8px;
+}
+
+/* ========== PHONE-SPECIFIC STYLES (max-width: 600px) ========== */
+@media (max-width: 600px) {
+    body {
+        padding: 0.4rem;
+    }
+    .container {
+        padding: 0.8rem;
+        border-radius: 1rem;
+    }
+    .neon-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+    .subtitle {
+        font-size: 0.7rem;
+        margin-bottom: 1rem;
+    }
+    .search-wrapper {
+        margin-bottom: 1rem;
+    }
+    #searchInput {
+        padding: 0.6rem 1rem 0.6rem 2.2rem;
+        font-size: 0.9rem;
+    }
+    .search-icon {
+        font-size: 1rem;
+        left: 0.7rem;
+    }
+    .places-list {
+        max-height: 220px;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .place-item {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+        border-left-width: 3px;
+    }
+    .location-panel {
+        padding: 0.6rem;
+    }
+    .location-panel h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.6rem;
+    }
+    #locationInfo {
+        font-size: 0.75rem;
+        line-height: 1.3;
+    }
+    #locationInfo strong {
+        font-size: 0.8rem;
+    }
+}

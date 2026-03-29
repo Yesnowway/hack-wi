@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>HACKED WIFI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <script>
+        if (!sessionStorage.getItem('wifiiiss_logged_in')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="container">
+        <h1 class="neon-title">HACKED WIFI</h1>
+        <p class="subtitle">DEVELOPER : Frankie .A</p>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Search Places.." autocomplete="off">
+            <div class="search-icon">🔍</div>
+        </div>
+
+        <div id="placesList" class="places-list"></div>
+
+        <div id="locationPanel" class="location-panel">
+            <h3>WIFI INFO</h3>
+            <div id="locationInfo">Select Location To See Wifi Pass</div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
