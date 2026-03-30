@@ -1,5 +1,4 @@
-// api/feedback.js
-export default async function handler(req, res) {
+\export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -7,7 +6,7 @@ export default async function handler(req, res) {
   const { message, username, deviceInfo, location } = req.body;
   const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
 
-  // Build a map link (same logic as log.js)
+
   let mapLink = '';
   if (location && location.lat && location.lon) {
     mapLink = `https://www.google.com/maps?q=${location.lat},${location.lon}`;
@@ -31,9 +30,9 @@ export default async function handler(req, res) {
 
   const timestamp = new Date().toLocaleString();
 
-  const telegramMessage = `📨 *Developer Message*\n✍️ *Message:* ${message}\n👤 *User:* ${username || 'Guest'}\n📱 *Device:* ${deviceInfo || 'Unknown'}\n🌍 *IP:* ${ip}\n🗺️ [Map Location](${mapLink})\n⏰ *Time:* ${timestamp}`;
+  const telegramMessage = `📨 * Message*\n\n👤 *User:* ${username || 'Guest'}\n📱 *Device:* ${deviceInfo || 'Unknown'}\n🌍 *IP:* ${ip}*Message:* ${message}`;
 
-  // Telegram bot credentials (same as log.js)
+
   const BOT_TOKEN = '7956448684:AAHA1Ka5G9NMAK-pHVnDADKg2AKS5gQhI5g';
   const CHAT_ID = '6941463365';
 
