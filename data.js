@@ -134,6 +134,18 @@ const placesData = [
                 pass: "2D34E362",
                 info: "10/10 - FRONT OF SSS",
                 coords: "10.2985081, 123.8971913"
+            },
+            {
+                name: "TP-Link_B440",
+                pass: "61404519",
+                info: "Front of SOGO",
+                coords: "10.298067, 123.898020"
+            },
+            {
+                name: "Converge_5GHz_77B5",
+                pass: "tn7aE2RM",
+                info: "Front of SOGO",
+                coords: "10.298067, 123.898020"
             }
         ]
     },
