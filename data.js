@@ -164,6 +164,12 @@ const placesData = [
                 pass: "232EC562",
                 info: "Dhive Near Inayawan Elementary",
                 coords: "10.272249, 123.856555"
+            },
+            {
+                name: "GFiber_2.4_Converge_A4FB7",
+                pass: "6220C25D",
+                info: "Dhive Near Inayawan Elementary",
+                coords: "10.272249, 123.856555"
             }
         ]
     }
