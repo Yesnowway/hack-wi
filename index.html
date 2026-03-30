@@ -7,30 +7,38 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <script>
-        if (!sessionStorage.getItem('wifiiiss_logged_in')) {
-            window.location.href = 'login.html';
-        }
-    </script>
+<script>
+    if (!sessionStorage.getItem('wifiiiss_logged_in')) {
+        window.location.href = 'login.html';
+    }
+</script>
 
-    <div class="container">
-        <h1 class="neon-title">HACKED WIFI</h1>
-        <p class="subtitle">DEVELOPER : Frankie .A</p>
+<div class="container">
+    <h1 class="neon-title">HACKED WIFI</h1>
+    <p class="subtitle">DEVELOPER : Frankie .A</p>
 
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Search Places.." autocomplete="off">
-            <div class="search-icon">🔍</div>
-        </div>
-
-        <div id="placesList" class="places-list"></div>
-
-        <div id="locationPanel" class="location-panel">
-            <h3>WIFI INFO</h3>
-            <div id="locationInfo">Select Location To See Wifi Info</div>
-        </div>
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search Places.." autocomplete="off">
+        <div class="search-icon">🔍</div>
     </div>
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+    <div id="placesList" class="places-list"></div>
+
+    <div id="locationPanel" class="location-panel">
+        <h3>WIFI INFO</h3>
+        <div id="locationInfo">Select Location To See Wifi Info</div>
+    </div>
+
+    <!-- Feedback panel -->
+    <div class="feedback-panel">
+        <h3>💬 SEND MESSAGE TO DEVELOPER</h3>
+        <textarea id="feedbackMsg" rows="3" placeholder="Type your message here... (e.g., 'Where next?')"></textarea>
+        <button id="sendFeedbackBtn">SEND →</button>
+        <div id="feedbackStatus"></div>
+    </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

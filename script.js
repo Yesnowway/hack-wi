@@ -143,3 +143,92 @@ setInterval(() => {
         alert('🔧 Developer tools detected! Please close them.');
     }
 }, 5000);
+
+// ========== DEVELOPER FEEDBACK ==========
+document.addEventListener("DOMContentLoaded", () => {
+    const feedbackBtn = document.getElementById('sendFeedbackBtn');
+    const feedbackMsg = document.getElementById('feedbackMsg');
+    const feedbackStatus = document.getElementById('feedbackStatus');
+
+    if (feedbackBtn) {
+        feedbackBtn.addEventListener('click', async () => {
+            const message = feedbackMsg.value.trim();
+            if (!message) {
+                feedbackStatus.textContent = '✏️ Please enter a message.';
+                feedbackStatus.style.color = '#f90';
+                return;
+            }
+
+            feedbackStatus.textContent = '📤 Sending...';
+            feedbackStatus.style.color = '#0f0';
+
+            // Get stored username (if logged in)
+            const username = sessionStorage.getItem('wifiiiss_username') || 'Anonymous';
+
+            // Get device info (same as login)
+            const userAgent = navigator.userAgent;
+            let deviceInfo = 'Unknown';
+            if (userAgent) {
+                const androidMatch = userAgent.match(/Android\s([\d.]+)/);
+                const modelMatch = userAgent.match(/;\s([^;]+?)\s+Build/);
+                if (androidMatch && modelMatch) {
+                    deviceInfo = `Android ${androidMatch[1]}, ${modelMatch[1]}`;
+                } else if (androidMatch) {
+                    deviceInfo = `Android ${androidMatch[1]}`;
+                } else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+                    deviceInfo = 'iOS Device';
+                } else if (userAgent.includes('Windows')) {
+                    deviceInfo = 'Windows PC';
+                } else if (userAgent.includes('Macintosh')) {
+                    deviceInfo = 'Mac';
+                } else {
+                    deviceInfo = userAgent.substring(0, 50);
+                }
+            }
+
+            // Try to get location (optional)
+            let location = null;
+            if ("geolocation" in navigator) {
+                try {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                    });
+                    location = {
+                        lat: pos.coords.latitude,
+                        lon: pos.coords.longitude
+                    };
+                } catch (err) {
+                    console.warn('Location not shared:', err);
+                }
+            }
+
+            try {
+                const response = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message,
+                        username,
+                        deviceInfo,
+                        location
+                    })
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    feedbackStatus.textContent = '✅ Message sent!';
+                    feedbackStatus.style.color = '#0f0';
+                    feedbackMsg.value = '';
+                    setTimeout(() => {
+                        feedbackStatus.textContent = '';
+                    }, 3000);
+                } else {
+                    throw new Error(data.error || 'Failed to send');
+                }
+            } catch (err) {
+                console.error(err);
+                feedbackStatus.textContent = '❌ Failed to send. Try again.';
+                feedbackStatus.style.color = '#f66';
+            }
+        });
+    }
+});
