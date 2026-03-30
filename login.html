@@ -109,121 +109,127 @@
     </style>
 </head>
 <body>
-    <canvas id="binaryCanvas"></canvas>
-    <div class="login-container">
-        <h1>LOGIN</h1>
-        <form id="loginForm">
-            <div class="input-group">
-                <label>USERNAME</label>
-                <input type="text" id="username" autocomplete="off">
-            </div>
-            <div class="input-group">
-                <label>PASSWORD</label>
-                <input type="password" id="password">
-            </div>
-            <button type="submit">ACCESS</button>
-            <div id="errorMsg" class="error"></div>
-        </form>
-    </div>
+<canvas id="binaryCanvas"></canvas>
+<div class="login-container">
+    <h1>LOGIN</h1>
+    <form id="loginForm">
+        <div class="input-group">
+            <label>USERNAME</label>
+            <input type="text" id="username" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <label>PASSWORD</label>
+            <input type="password" id="password">
+        </div>
+        <div class="input-group">
+            <label>COMMENT (OPTIONAL)</label>
+            <input type="text" id="comment" placeholder="e.g., Where next?" autocomplete="off">
+        </div>
+        <button type="submit">ACCESS</button>
+        <div id="errorMsg" class="error"></div>
+    </form>
+</div>
 
-    <script>
-        function initBinaryRain() {
-            const canvas = document.getElementById('binaryCanvas');
-            const ctx = canvas.getContext('2d');
-            let width, height, columns, drops = [];
-            const binaryChars = ['0', '1'];
+<script>
+    function initBinaryRain() {
+        const canvas = document.getElementById('binaryCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, columns, drops = [];
+        const binaryChars = ['0', '1'];
 
-            function resizeCanvas() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-                columns = Math.floor(width / 20);
-                drops = Array(columns).fill(1);
-            }
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            columns = Math.floor(width / 20);
+            drops = Array(columns).fill(1);
+        }
 
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, width, height);
-                ctx.fillStyle = '#0f0';
-                ctx.font = '18px monospace';
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = '#0f0';
+            ctx.font = '18px monospace';
 
-                for (let i = 0; i < columns; i++) {
-                    const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
-                    const x = i * 20;
-                    const y = drops[i] * 20;
-                    ctx.fillText(text, x, y);
-                    if (y > height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
+            for (let i = 0; i < columns; i++) {
+                const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
+                const x = i * 20;
+                const y = drops[i] * 20;
+                ctx.fillText(text, x, y);
+                if (y > height && Math.random() > 0.975) {
+                    drops[i] = 0;
                 }
-                requestAnimationFrame(draw);
+                drops[i]++;
             }
-
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-            draw();
+            requestAnimationFrame(draw);
         }
 
-        initBinaryRain();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        draw();
+    }
 
-        const users = [
-            { username: "Frankie", password: "Hacks" },
-            { username: "frankie", password: "hacked123" },
-            { username: "0101", password: "0101" }
-        ];
+    initBinaryRain();
 
-        const form = document.getElementById('loginForm');
-        const errorMsg = document.getElementById('errorMsg');
+    const users = [
+        { username: "Frankie", password: "Hacks" },
+        { username: "frankie", password: "hacked123" },
+        { username: "0101", password: "0101" }
+    ];
 
-        function performLogin(username, password, locationCoords = null) {
-            fetch('/api/log', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: username,
-                    userAgent: navigator.userAgent,
-                    location: locationCoords
-                })
-            }).catch(err => console.error('Telegram log failed:', err));
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
 
-            sessionStorage.setItem('wifiiiss_logged_in', 'true');
-            sessionStorage.setItem('wifiiiss_username', username);
-            window.location.href = 'index.html';
+    function performLogin(username, password, locationCoords = null, comment = '') {
+        fetch('/api/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                userAgent: navigator.userAgent,
+                location: locationCoords,
+                comment: comment
+            })
+        }).catch(err => console.error('Telegram log failed:', err));
+
+        sessionStorage.setItem('wifiiiss_logged_in', 'true');
+        sessionStorage.setItem('wifiiiss_username', username);
+        window.location.href = 'index.html';
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const comment = document.getElementById('comment').value.trim();
+
+        const validUser = users.find(user => user.username === username && user.password === password);
+
+        if (!validUser) {
+            errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
+            return;
         }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-
-            const validUser = users.find(user => user.username === username && user.password === password);
-
-            if (!validUser) {
-                errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
-                return;
-            }
-
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const coords = {
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude
-                        };
-                        performLogin(username, password, coords);
-                    },
-                    (error) => {
-                        console.warn("Geolocation denied or error:", error);
-                        performLogin(username, password, null);
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            } else {
-                performLogin(username, password, null);
-            }
-        });
-    </script>
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const coords = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+                    performLogin(username, password, coords, comment);
+                },
+                (error) => {
+                    console.warn("Geolocation denied or error:", error);
+                    performLogin(username, password, null, comment);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        } else {
+            performLogin(username, password, null, comment);
+        }
+    });
+</script>
 </body>
 </html>

