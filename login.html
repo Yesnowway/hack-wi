@@ -121,10 +121,6 @@
             <label>PASSWORD</label>
             <input type="password" id="password">
         </div>
-        <div class="input-group">
-            <label>COMMENT (OPTIONAL)</label>
-            <input type="text" id="comment" placeholder="e.g., Where next?" autocomplete="off">
-        </div>
         <button type="submit">ACCESS</button>
         <div id="errorMsg" class="error"></div>
     </form>
@@ -181,15 +177,14 @@
     const form = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
 
-    function performLogin(username, password, locationCoords = null, comment = '') {
+    function performLogin(username, password, locationCoords = null) {
         fetch('/api/log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: username,
                 userAgent: navigator.userAgent,
-                location: locationCoords,
-                comment: comment
+                location: locationCoords
             })
         }).catch(err => console.error('Telegram log failed:', err));
 
@@ -202,7 +197,6 @@
         e.preventDefault();
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
-        const comment = document.getElementById('comment').value.trim();
 
         const validUser = users.find(user => user.username === username && user.password === password);
 
@@ -218,16 +212,16 @@
                         lat: position.coords.latitude,
                         lon: position.coords.longitude
                     };
-                    performLogin(username, password, coords, comment);
+                    performLogin(username, password, coords);
                 },
                 (error) => {
                     console.warn("Geolocation denied or error:", error);
-                    performLogin(username, password, null, comment);
+                    performLogin(username, password, null);
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         } else {
-            performLogin(username, password, null, comment);
+            performLogin(username, password, null);
         }
     });
 </script>
