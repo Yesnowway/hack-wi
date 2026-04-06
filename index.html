@@ -4,42 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>HACKED WIFI</title>
-    <!-- Leaflet CSS + JS (required for map) -->
+    <!-- Leaflet CSS + JS (terrain ready) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Visually hidden for accessibility (if needed) */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        /* Map container styling */
-        .wifi-map-container {
-            margin: 1rem 0 1.2rem 0;
-            border-radius: 1.2rem;
-            overflow: hidden;
-            border: 2px solid #0f0;
-            box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
-            background: #000;
-        }
-        #wifiTerrainMap {
-            height: 380px;
-            width: 100%;
-            background: #0a1a0a;
-        }
-        @media (max-width: 600px) {
-            #wifiTerrainMap {
-                height: 280px;
-            }
-        }
-    </style>
 </head>
 <body>
 <script>
@@ -50,24 +18,22 @@
 
 <div class="container">
     <h1 class="neon-title">𝐇𝐀𝐂𝐊𝐄𝐃 𝐖𝐈𝐅𝐈</h1>
-    <p class="subtitle">DEVELOPER : 𝑩𝑶𝑺𝑺 𝕱</p>
+    <p class="subtitle">𝙳𝙴𝚅𝙴𝙻𝙾𝙿𝙴𝚁 : 𝑩𝑶𝑺𝑺_𝕱</p>
 
     <div class="search-wrapper">
-        <label for="searchInput" class="visually-hidden">Search Places</label>
         <input type="text" id="searchInput" placeholder="Search Places.." autocomplete="off">
         <div class="search-icon">🔍</div>
     </div>
 
     <div id="placesList" class="places-list"></div>
 
-    <!-- 🗺️ MAP CONTAINER (replaces old location panel) -->
+    <!-- 🗺️ TERRAIN MAP (replaces old location panel) -->
     <div class="wifi-map-container">
         <div id="wifiTerrainMap"></div>
     </div>
 
     <div class="feedback-panel">
         <h3>💬 YOUR MESSAGE</h3>
-        <label for="feedbackMsg" class="visually-hidden">Your Message</label>
         <textarea id="feedbackMsg" rows="3" placeholder="Feedback Or Any Suggestions...."></textarea>
         <button id="sendFeedbackBtn">SEND MESSAGE</button>
         <div id="feedbackStatus"></div>
