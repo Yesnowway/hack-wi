@@ -228,5 +228,50 @@ const placesData = [
                 coords: "10.323891, 123.991959"
             }
         ]
-    }
+    },
+        displayName: "IEC Convention Center Cebu (IC3)",
+        actualName: "Luz",
+        entries: [
+             {
+                name: "Layko-Cebu_5G",
+                pass: "layko123ACL",
+                info: "back of landers",
+                coords: "10.322028, 123.908645"
+
+             },
+             {
+
+                name: "WAFcebu 4G",
+                pass: "Pontevedra12101925",
+                info: "IEC Conv. Center",
+                coords: "10.321712, 123.908785"
+
+             }
+        ]
+    },
+
+        displayName: "Ayala",
+        actualName: "Luz",
+        entries: [
+             {
+
+                 name: "chavez fam",
+                 pass: "Pldthome#2404",
+                 info: "JYXN'S GREENHOUSE EATERY - IEC CONV DAPIT",
+                 coords: "10.3191684, 123.9085323"
+
+             },
+             {
+
+                 name: "",
+                 pass: "",
+                 info: "",
+                 coords: ""
+
+             }
+
+
+
+
+    ]
 ];
