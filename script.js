@@ -59,7 +59,7 @@ function parseCoords(coordStr) {
     return null;
 }
 
-// Initialize HIGH-RES SATELLITE map (Google Satellite – shows trees, houses, buildings)
+// Initialize Google Satellite map
 function initSatelliteMap() {
     if (globalMap) return;
     const mapContainer = document.getElementById('wifiTerrainMap');
@@ -77,17 +77,27 @@ function initSatelliteMap() {
     loadAllWifiMarkers();
 }
 
-// Helper: open Google Maps directions from current location to destination
-function navigateTo(lat, lng, name) {
-    // Use Google Maps directions API: destination only, browser will request location
+// Helper: open Google Maps directions
+window.navigateTo = function(lat, lng, name) {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
     window.open(url, '_blank');
+};
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
 }
 
-// Load all WiFi points with navigation in popup
+// Load all WiFi points with PERMANENT TEXT LABELS (store name + SSID)
 function loadAllWifiMarkers() {
     if (!globalMap) return;
 
+    // Clear existing markers
     allMarkers.forEach(marker => {
         if (globalMap.hasLayer(marker)) globalMap.removeLayer(marker);
     });
@@ -99,6 +109,13 @@ function loadAllWifiMarkers() {
             const coords = parseCoords(entry.coords);
             if (!coords) continue;
 
+            // Create marker
+            const marker = L.marker([coords.lat, coords.lng], {
+                title: entry.name,
+                riseOnHover: true
+            });
+
+            // Popup content (same as before)
             const popupContent = `
                 <div style="min-width: 180px;">
                     <strong>📡 SSID :</strong> ${escapeHtml(entry.name)}<br>
@@ -111,14 +128,18 @@ function loadAllWifiMarkers() {
                     </div>
                 </div>
             `;
+            marker.bindPopup(popupContent, { maxWidth: 280, className: 'neon-wifi-popup' });
 
-            const marker = L.marker([coords.lat, coords.lng], {
-                title: entry.name,
-                riseOnHover: true
-            }).bindPopup(popupContent, {
-                maxWidth: 280,
-                className: 'neon-wifi-popup'
-            });
+            // Add PERMANENT TOOLTIP (always visible label)
+            // Show: "PLACE NAME - SSID"
+            const labelText = `${place.displayName}\n${entry.name}`;
+            marker.bindTooltip(labelText, {
+                permanent: true,      // always visible
+                direction: 'top',     // above the marker
+                offset: [0, -20],     // slight offset above icon
+                opacity: 0.9,
+                className: 'wifi-label-tooltip'
+            }).openTooltip();         // open immediately
 
             marker.entryData = { entry, placeName: place.displayName };
             marker.addTo(globalMap);
@@ -135,18 +156,7 @@ function loadAllWifiMarkers() {
     }
 }
 
-// Helper: escape HTML
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}
-
-// Focus map on a specific entry and open its popup
+// Focus on a specific entry
 function focusOnWifiEntry(entry) {
     const marker = allMarkers.find(m => m.entryData.entry === entry);
     if (marker && globalMap) {
@@ -308,9 +318,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-// Make navigateTo available globally (for popup onclick)
-window.navigateTo = function(lat, lng, name) {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
-    window.open(url, '_blank');
-};
