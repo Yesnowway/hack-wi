@@ -7,7 +7,7 @@ const placesData = [
                 name: "DITO_D9C4D_5",
                 pass: "2a893159",
                 info: "Food Court , Mang Inasal",
-                coords: "10.297968270171634, 123.89538174539965"
+                coords: "10.2980004, 123.8952883"
             },
             {
                 name: "DITO_D2FC4_5",
@@ -31,7 +31,7 @@ const placesData = [
                 name: "CITU_CESAFI@26",
                 pass: "CIT-U@CESAFI26!!",
                 info: "CITU Cafe",
-                coords: "10.295259, 123.880305"
+                coords: "10.295012, 123.880555"
             },
             {
                 name: "CITU_EXEC2.4GHz",
@@ -140,13 +140,13 @@ const placesData = [
                 name: "GFiber_CCE89",
                 pass: "2D34E362",
                 info: "10/10 - FRONT OF SSS",
-                coords: "10.2985742, 123.8970492"
+                coords: "10.298618, 123.897288"
             },
             {
                 name: "TP-Link_B440",
                 pass: "61404519",
                 info: "Front of SOGO",
-                coords: "10.298071, 123.898020"
+                coords: "10.298120, 123.898110"
             },
             {
                 name: "Converge_5GHz_77B5",
