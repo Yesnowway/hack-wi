@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>HACKED WIFI</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Visually hidden but accessible to screen readers */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
 </head>
 <body>
 <script>
@@ -18,6 +31,8 @@
     <p class="subtitle">DEVELOPER : 𝑩𝑶𝑺𝑺 𝕱</p>
 
     <div class="search-wrapper">
+        <!-- Hidden label for search input -->
+        <label for="searchInput" class="visually-hidden">Search Places</label>
         <input type="text" id="searchInput" placeholder="Search Places.." autocomplete="off">
         <div class="search-icon">🔍</div>
     </div>
@@ -30,7 +45,9 @@
     </div>
 
     <div class="feedback-panel">
-        <h3>💬YOUR MESSAGE</h3>
+        <h3>💬 YOUR MESSAGE</h3>
+        <!-- Hidden label for textarea -->
+        <label for="feedbackMsg" class="visually-hidden">Your Message</label>
         <textarea id="feedbackMsg" rows="3" placeholder="Feedback Or Any Suggestions...."></textarea>
         <button id="sendFeedbackBtn">SEND MESSAGE</button>
         <div id="feedbackStatus"></div>
