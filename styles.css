@@ -226,6 +226,7 @@ img {
         font-size: 0.85rem;
         border-left-width: 3px;
     }
+    /*location input*/
     .location-panel {
         padding: 0.6rem;
     }
@@ -241,7 +242,7 @@ img {
         font-size: 0.8rem;
     }
 }
-
+/*FEEDBACK SECTION*/
 /* Feedback panel styles */
 .feedback-panel {
     margin-top: 1.5rem;
