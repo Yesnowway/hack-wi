@@ -1,7 +1,7 @@
 const placesData = [
     {
         displayName: "Elizabeth Mall",
-        actualName: "Emall",
+        actualName: "Elizabeth Mall",
         entries: [
             {
                 name: "DITO_D9C4D_5",
@@ -43,7 +43,7 @@ const placesData = [
     },
     {
         displayName: "Asian College Of Technology",
-        actualName: "ACT",
+        actualName: "Near ACT",
         entries: [
             {
                 name: "Converge_5GHz_B81D",
@@ -92,6 +92,13 @@ const placesData = [
                 pass: "a7AcTKe3",
                 info: "Minute Burger",
                 coords: "10.2789182, 123.8551778"
+            },
+            {
+
+              name: "GlobeAtHome_9e088",
+              pass: "P6a41975",
+              info: "SkyWalk",
+              coords: "10.279138, 123.855366"
             }
         ]
     },
@@ -146,6 +153,12 @@ const placesData = [
                 pass: "tn7aE2RM",
                 info: "Front of SOGO",
                 coords: "10.298067, 123.898020"
+            },
+            {
+                name: "GlobeAtHome_8B0E1_5_2",
+                pass: "calambacity.2025",
+                info: "Front Of Isla",
+                coords: "10.298196, 123.898235"
             }
         ]
     },
@@ -170,6 +183,19 @@ const placesData = [
                 pass: "6220C25D",
                 info: "Dhive Near Inayawan Elementary",
                 coords: "10.272249, 123.856555"
+            }
+        ]
+    },
+    {
+
+        displayName: "Lapu Lapu City",
+        actualName: "Isla",
+        entries: [
+            {
+                name: "Converge_2.4GHz_FBBF",
+                pass: "p3uHeFdR",
+                info: "Silingan Ni Kuen",
+                coords: "10.323891, 123.991959"
             }
         ]
     }
