@@ -14,7 +14,6 @@ body {
     padding: 0.8rem;
     position: relative;
     overflow-x: hidden;
-    /* Screenshot / selection blocking */
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -22,7 +21,6 @@ body {
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
 }
-
 
 img {
     -webkit-user-drag: none;
@@ -144,106 +142,53 @@ img {
     color: #fff;
 }
 
-.location-panel {
-    background: #071007aa;
+/* MAP CONTAINER (replaces old location panel) */
+.wifi-map-container {
+    margin: 1rem 0 1.2rem 0;
     border-radius: 1.2rem;
-    padding: 0.8rem;
-    border: 1px solid #0f0;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
-    backdrop-filter: blur(8px);
+    overflow: hidden;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+    background: #000;
 }
 
-.location-panel h3 {
-    color: #0f0;
-    margin-bottom: 0.8rem;
-    font-family: monospace;
-    letter-spacing: 1px;
-    font-size: 1.3rem;
-    text-align: center;
-    text-shadow: 0 0 3px #0f0;
-}
-
-#locationInfo {
-    color: #afa;
-    font-size: 0.85rem;
-    font-family: monospace;
-    word-break: break-word;
-    line-height: 1.4;
-}
-
-#locationInfo strong {
-    font-size: 0.9rem;
-    color: #0f0;
-}
-
-.places-list::-webkit-scrollbar {
-    width: 4px;
-}
-.places-list::-webkit-scrollbar-track {
+#wifiTerrainMap {
+    height: 380px;
+    width: 100%;
     background: #0a1a0a;
-    border-radius: 8px;
-}
-.places-list::-webkit-scrollbar-thumb {
-    background: #0f0;
-    border-radius: 8px;
 }
 
-/* ========== PHONE-SPECIFIC STYLES (max-width: 600px) ========== */
-@media (max-width: 600px) {
-    body {
-        padding: 0.4rem;
-    }
-    .container {
-        padding: 0.8rem;
-        border-radius: 1rem;
-    }
-    .neon-title {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-    }
-    .subtitle {
-        font-size: 0.7rem;
-        margin-bottom: 1rem;
-    }
-    .search-wrapper {
-        margin-bottom: 1rem;
-    }
-    #searchInput {
-        padding: 0.6rem 1rem 0.6rem 2.2rem;
-        font-size: 0.9rem;
-    }
-    .search-icon {
-        font-size: 1rem;
-        left: 0.7rem;
-    }
-    .places-list {
-        max-height: 220px;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    .place-item {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
-        border-left-width: 3px;
-    }
-    /*location input*/
-    .location-panel {
-        padding: 0.6rem;
-    }
-    .location-panel h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.6rem;
-    }
-    #locationInfo {
-        font-size: 0.75rem;
-        line-height: 1.3;
-    }
-    #locationInfo strong {
-        font-size: 0.8rem;
-    }
+/* Leaflet popup neon style */
+.leaflet-popup-content-wrapper {
+    background: #0a1a0aee;
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    border: 1px solid #0f0;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 15px #0f0;
 }
-/*FEEDBACK SECTION*/
-/* Feedback panel styles */
+
+.leaflet-popup-content {
+    color: #cfc;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin: 10px 12px;
+}
+
+.leaflet-popup-content strong {
+    color: #0f0;
+}
+
+.leaflet-popup-tip {
+    background: #0f0;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color: #0f0;
+}
+
+/* feedback panel remains */
 .feedback-panel {
     margin-top: 1.5rem;
     background: rgba(7, 16, 7, 0.8);
@@ -296,4 +241,53 @@ img {
     text-align: center;
     font-size: 0.8rem;
     color: #8f8;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    body {
+        padding: 0.4rem;
+    }
+    .container {
+        padding: 0.8rem;
+        border-radius: 1rem;
+    }
+    .neon-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+    .subtitle {
+        font-size: 0.7rem;
+        margin-bottom: 1rem;
+    }
+    .search-wrapper {
+        margin-bottom: 1rem;
+    }
+    #searchInput {
+        padding: 0.6rem 1rem 0.6rem 2.2rem;
+        font-size: 0.9rem;
+    }
+    .search-icon {
+        font-size: 1rem;
+        left: 0.7rem;
+    }
+    .places-list {
+        max-height: 220px;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .place-item {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+        border-left-width: 3px;
+    }
+    .wifi-map-container {
+        margin: 0.8rem 0;
+    }
+    #wifiTerrainMap {
+        height: 280px;
+    }
+    .leaflet-popup-content {
+        font-size: 0.75rem;
+    }
 }

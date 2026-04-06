@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>HACKED WIFI</title>
+    <!-- Leaflet CSS + JS (terrain ready) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,13 +27,13 @@
 
     <div id="placesList" class="places-list"></div>
 
-    <div id="locationPanel" class="location-panel">
-        <h3>WIFI INFO</h3>
-        <div id="locationInfo">Select Location To See Wifi Info</div>
+    <!-- 🗺️ TERRAIN MAP (replaces old location panel) -->
+    <div class="wifi-map-container">
+        <div id="wifiTerrainMap"></div>
     </div>
 
     <div class="feedback-panel">
-        <h3>💬YOUR MESSAGE</h3>
+        <h3>💬 YOUR MESSAGE</h3>
         <textarea id="feedbackMsg" rows="3" placeholder="Feedback Or Any Suggestions...."></textarea>
         <button id="sendFeedbackBtn">SEND MESSAGE</button>
         <div id="feedbackStatus"></div>
