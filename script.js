@@ -162,10 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
             feedbackStatus.textContent = '📤 Sending...';
             feedbackStatus.style.color = '#0f0';
 
-            // Get stored username (if logged in)
+
             const username = sessionStorage.getItem('wifiiiss_username') || 'Anonymous';
 
-            // Get device info (same as login)
             const userAgent = navigator.userAgent;
             let deviceInfo = 'Unknown';
             if (userAgent) {

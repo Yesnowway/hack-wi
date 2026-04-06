@@ -23,7 +23,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent image dragging (if any) */
+
 img {
     -webkit-user-drag: none;
     user-drag: none;

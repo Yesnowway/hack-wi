@@ -26,7 +26,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // Build map link using either GPS or IP fallback
   let mapLink = '';
   if (location && location.lat && location.lon) {
     mapLink = `https://www.google.com/maps?q=${location.lat},${location.lon}`;

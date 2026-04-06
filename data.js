@@ -189,7 +189,7 @@ const placesData = [
     {
 
         displayName: "Lapu Lapu City",
-        actualName: "Isla",
+        actualName: "Isl",
         entries: [
             {
                 name: "Converge_2.4GHz_FBBF",
