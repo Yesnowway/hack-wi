@@ -113,7 +113,7 @@ function loadAllWifiMarkers() {
 
             const popupContent = `
                 <div style="min-width: 180px;">
-                    <strong>📡 SSID :</strong> ${escapeHtml(entry.name)}<br>
+                    <strong>📡 NAME :</strong> ${escapeHtml(entry.name)}<br>
                     <strong>🔑 PASS :</strong> <span style="background:#000; padding:2px 4px; border-radius:6px;">${escapeHtml(entry.pass)}</span><br>
                     <strong>📍 INFO :</strong> ${escapeHtml(entry.info)}<br>
                     <hr style="border-color:#0f0; margin:6px 0;">
