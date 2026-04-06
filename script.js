@@ -59,19 +59,21 @@ function parseCoords(coordStr) {
     return null;
 }
 
-// Initialize terrain map (OpenTopoMap = Eliff style)
-function initTerrainMap() {
+// Initialize HIGH-RES SATELLITE map (Google Satellite – shows trees, houses, buildings)
+function initSatelliteMap() {
     if (globalMap) return;
     const mapContainer = document.getElementById('wifiTerrainMap');
     if (!mapContainer) return;
 
     // Center on Cebu (average of coordinates)
-    globalMap = L.map('wifiTerrainMap').setView([10.305, 123.885], 14);
+    globalMap = L.map('wifiTerrainMap').setView([10.305, 123.885], 15); // zoom 15 for more detail
 
-    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors, <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-        maxZoom: 18,
-        minZoom: 12
+    // Google Satellite layer – excellent detail for buildings, trees, houses
+    L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps',
+        maxZoom: 20,
+        minZoom: 12,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(globalMap);
 
     loadAllWifiMarkers();
@@ -140,12 +142,12 @@ function escapeHtml(str) {
 function focusOnWifiEntry(entry) {
     const marker = allMarkers.find(m => m.entryData.entry === entry);
     if (marker && globalMap) {
-        globalMap.setView(marker.getLatLng(), 17);
+        globalMap.setView(marker.getLatLng(), 18); // zoom 18 for street-level detail
         marker.openPopup();
     } else {
         const coords = parseCoords(entry.coords);
         if (coords && globalMap) {
-            globalMap.setView([coords.lat, coords.lng], 17);
+            globalMap.setView([coords.lat, coords.lng], 18);
             L.popup()
                 .setLatLng([coords.lat, coords.lng])
                 .setContent(`📍 ${entry.name}<br>🔓 ${entry.pass}<br>📌 ${entry.info}`)
@@ -157,7 +159,7 @@ function focusOnWifiEntry(entry) {
 // ========== PLACE LIST & SEARCH ==========
 document.addEventListener("DOMContentLoaded", () => {
     initBinaryRain();
-    initTerrainMap();
+    initSatelliteMap();
 
     const searchInput = document.getElementById("searchInput");
     const placesList = document.getElementById("placesList");
@@ -229,7 +231,7 @@ setInterval(() => {
     }
 }, 5000);
 
-// ========== FEEDBACK (unchanged logic) ==========
+// ========== FEEDBACK ==========
 document.addEventListener("DOMContentLoaded", () => {
     const feedbackBtn = document.getElementById('sendFeedbackBtn');
     const feedbackMsg = document.getElementById('feedbackMsg');
