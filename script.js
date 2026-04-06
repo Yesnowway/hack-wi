@@ -65,10 +65,8 @@ function initSatelliteMap() {
     const mapContainer = document.getElementById('wifiTerrainMap');
     if (!mapContainer) return;
 
-    // Center on Cebu (average of coordinates)
-    globalMap = L.map('wifiTerrainMap').setView([10.305, 123.885], 15); // zoom 15 for more detail
+    globalMap = L.map('wifiTerrainMap').setView([10.305, 123.885], 15);
 
-    // Google Satellite layer – excellent detail for buildings, trees, houses
     L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
         attribution: '&copy; Google Maps',
         maxZoom: 20,
@@ -79,11 +77,17 @@ function initSatelliteMap() {
     loadAllWifiMarkers();
 }
 
-// Load all WiFi points from placesData into map markers
+// Helper: open Google Maps directions from current location to destination
+function navigateTo(lat, lng, name) {
+    // Use Google Maps directions API: destination only, browser will request location
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+    window.open(url, '_blank');
+}
+
+// Load all WiFi points with navigation in popup
 function loadAllWifiMarkers() {
     if (!globalMap) return;
 
-    // remove old markers if any
     allMarkers.forEach(marker => {
         if (globalMap.hasLayer(marker)) globalMap.removeLayer(marker);
     });
@@ -96,11 +100,15 @@ function loadAllWifiMarkers() {
             if (!coords) continue;
 
             const popupContent = `
-                <div style="min-width: 160px;">
-                    <strong>📡 NAME :</strong> ${escapeHtml(entry.name)}<br>
+                <div style="min-width: 180px;">
+                    <strong>📡 SSID :</strong> ${escapeHtml(entry.name)}<br>
                     <strong>🔑 PASS :</strong> <span style="background:#000; padding:2px 4px; border-radius:6px;">${escapeHtml(entry.pass)}</span><br>
                     <strong>📍 INFO :</strong> ${escapeHtml(entry.info)}<br>
-                    <strong>🗺️</strong> <a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank" style="color:#0f0;">Open in Google Maps</a>
+                    <hr style="border-color:#0f0; margin:6px 0;">
+                    <div style="display:flex; gap:8px; justify-content:space-between;">
+                        <a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank" style="color:#0f0; text-decoration:none;">🗺️ VIEW MAP</a>
+                        <a href="#" onclick="navigateTo(${coords.lat}, ${coords.lng}, '${escapeHtml(entry.name)}'); return false;" style="color:#0f0; text-decoration:none;">🧭 NAVIGATE</a>
+                    </div>
                 </div>
             `;
 
@@ -108,7 +116,7 @@ function loadAllWifiMarkers() {
                 title: entry.name,
                 riseOnHover: true
             }).bindPopup(popupContent, {
-                maxWidth: 260,
+                maxWidth: 280,
                 className: 'neon-wifi-popup'
             });
 
@@ -142,7 +150,7 @@ function escapeHtml(str) {
 function focusOnWifiEntry(entry) {
     const marker = allMarkers.find(m => m.entryData.entry === entry);
     if (marker && globalMap) {
-        globalMap.setView(marker.getLatLng(), 18); // zoom 18 for street-level detail
+        globalMap.setView(marker.getLatLng(), 18);
         marker.openPopup();
     } else {
         const coords = parseCoords(entry.coords);
@@ -150,7 +158,7 @@ function focusOnWifiEntry(entry) {
             globalMap.setView([coords.lat, coords.lng], 18);
             L.popup()
                 .setLatLng([coords.lat, coords.lng])
-                .setContent(`📍 ${entry.name}<br>🔓 ${entry.pass}<br>📌 ${entry.info}`)
+                .setContent(`📍 ${entry.name}<br>🔓 ${entry.pass}<br>📌 ${entry.info}<br><a href="#" onclick="navigateTo(${coords.lat}, ${coords.lng}, '${escapeHtml(entry.name)}'); return false;" style="color:#0f0;">🧭 NAVIGATE</a>`)
                 .openOn(globalMap);
         }
     }
@@ -300,3 +308,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// Make navigateTo available globally (for popup onclick)
+window.navigateTo = function(lat, lng, name) {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+    window.open(url, '_blank');
+};
