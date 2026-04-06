@@ -91,7 +91,7 @@ const placesData = [
                 name: "Converge_2.4GHz_4C35",
                 pass: "a7AcTKe3",
                 info: "Minute Burger",
-                coords: "10.2789182, 123.8551778"
+                coords: "10.278822, 123.855646"
             },
             {
 
