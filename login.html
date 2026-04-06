@@ -106,25 +106,6 @@
             margin-top: 1rem;
             font-size: 0.9rem;
         }
-
-        .retry-btn {
-            background: #333;
-            color: #0f0;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            padding: 0.5rem;
-        }
-
-        .retry-btn:hover {
-            background: #555;
-        }
-
-        .warning {
-            color: #ff0;
-            font-size: 0.8rem;
-            text-align: center;
-            margin-top: 0.5rem;
-        }
     </style>
 </head>
 <body>
@@ -142,12 +123,10 @@
         </div>
         <button type="submit">ACCESS</button>
         <div id="errorMsg" class="error"></div>
-        <div id="httpsWarning" class="warning"></div>
     </form>
 </div>
 
 <script>
-    // Binary rain background (unchanged)
     function initBinaryRain() {
         const canvas = document.getElementById('binaryCanvas');
         const ctx = canvas.getContext('2d');
@@ -189,11 +168,6 @@
 
     initBinaryRain();
 
-    // Check for secure context
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && !location.hostname.includes('127.0.0.1')) {
-        document.getElementById('httpsWarning').innerHTML = '⚠️ HTTPS REQUIRED for location access. Your browser may block geolocation.';
-    }
-
     const users = [
         { username: "Frankie", password: ".A" },
         { username: "Mari Chan", password: "Totot" },
@@ -208,9 +182,8 @@
 
     const form = document.getElementById('loginForm');
     const errorMsg = document.getElementById('errorMsg');
-    let locationAttempts = 0;
 
-    function performLogin(username, password, locationCoords) {
+    function performLogin(username, password, locationCoords = null) {
         fetch('/api/log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -226,69 +199,36 @@
         window.location.href = 'index.html';
     }
 
-    function requestLocationAndLogin(username, password) {
-        errorMsg.textContent = '📍 Requesting location (attempt ' + (locationAttempts + 1) + ')...';
-        errorMsg.style.color = '#0f0';
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                console.log('Location obtained:', position.coords);
-                const validUser = users.find(user => user.username === username && user.password === password);
-                if (!validUser) {
-                    errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
-                    errorMsg.style.color = '#f00';
-                    return;
-                }
-                const coords = { lat: position.coords.latitude, lon: position.coords.longitude };
-                performLogin(username, password, coords);
-            },
-            (error) => {
-                console.error('Geolocation error:', error);
-                let message = '';
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        message = '⚠️ LOCATION PERMISSION DENIED. Please enable location in browser settings and refresh.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        message = '⚠️ GPS SIGNAL WEAK. Go outside or turn on high accuracy. Tap "Retry Location".';
-                        break;
-                    case error.TIMEOUT:
-                        message = '⚠️ LOCATION TIMEOUT. Try again or move to open area. Tap "Retry Location".';
-                        break;
-                    default:
-                        message = '⚠️ LOCATION ERROR: ' + error.message;
-                }
-                errorMsg.innerHTML = message + '<br><button id="retryLocationBtn" class="retry-btn">🔄 Retry Location</button>';
-                errorMsg.style.color = '#f00';
-
-                // Attach retry handler
-                const retryBtn = document.getElementById('retryLocationBtn');
-                if (retryBtn) {
-                    retryBtn.onclick = (e) => {
-                        e.preventDefault();
-                        locationAttempts++;
-                        requestLocationAndLogin(username, password);
-                    };
-                }
-            },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }  // longer timeout
-        );
-    }
-
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
-        if (!("geolocation" in navigator)) {
-            errorMsg.textContent = '⚠️ LOCATION REQUIRED: Your browser does not support geolocation. Access denied.';
+        const validUser = users.find(user => user.username === username && user.password === password);
+
+        if (!validUser) {
+            errorMsg.textContent = 'ACCESS DENIED. INVALID CREDENTIALS.';
             return;
         }
 
-        // Reset attempts counter
-        locationAttempts = 0;
-        requestLocationAndLogin(username, password);
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const coords = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+                    performLogin(username, password, coords);
+                },
+                (error) => {
+                    console.warn("Geolocation denied or error:", error);
+                    performLogin(username, password, null);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        } else {
+            performLogin(username, password, null);
+        }
     });
 </script>
 </body>
