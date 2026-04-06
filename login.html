@@ -218,7 +218,7 @@
         }
 
         // Clear previous error and show loading
-        errorMsg.textContent = '📍 Requesting location...';
+        errorMsg.textContent = 'Loading...';
         errorMsg.style.color = '#0f0';
 
         // Request location every time ACCESS is clicked
@@ -234,10 +234,10 @@
                 let message = '';
                 switch(error.code) {
                     case error.PERMISSION_DENIED:
-                        message = '⚠️ LOCATION ACCESS DENIED. Please enable location in your browser settings and try again.';
+                        message = '⚠️ LOCATION ACCESS DENIED. Please enable location in your browser settings to get wifi Location..';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = '⚠️ LOCATION UNAVAILABLE. Please check your device GPS.';
+                        message = '⚠️ LOCATION UNAVAILABLE. Please check your device Location';
                         break;
                     case error.TIMEOUT:
                         message = '⚠️ LOCATION TIMEOUT. Please try again.';
