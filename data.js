@@ -13,7 +13,7 @@ const placesData = [
                 name: "DITO_D2FC4_5",
                 pass: "6e00C257",
                 info: "Food Court , Mang Inasal",
-                coords: "10.297968270171634, 123.89538174539965"
+                coords: "10.2980448, 123.8949653"
             },
             {
                 name: "SmartBro_3D6F",
@@ -37,7 +37,7 @@ const placesData = [
                 name: "CITU_EXEC2.4GHz",
                 pass: "CITU-Ex3C25!",
                 info: "CITU CAFE",
-                coords: "10.295259, 123.880305"
+                coords: "10.295042, 123.880677"
             }
         ]
     },
@@ -110,7 +110,7 @@ const placesData = [
                 name: "SmartBro_A71B",
                 pass: "smartbro",
                 info: "Front Of Colonade - miss g's colon",
-                coords: "10.297206097409326, 123.89951504766407"
+                coords: "10.297116, 123.899523"
             },
             {
                 name: "Angel's_Aesthetic",
@@ -140,13 +140,13 @@ const placesData = [
                 name: "GFiber_CCE89",
                 pass: "2D34E362",
                 info: "10/10 - FRONT OF SSS",
-                coords: "10.2985081, 123.8971913"
+                coords: "10.2985742, 123.8970492"
             },
             {
                 name: "TP-Link_B440",
                 pass: "61404519",
                 info: "Front of SOGO",
-                coords: "10.298067, 123.898020"
+                coords: "10.298071, 123.898020"
             },
             {
                 name: "Converge_5GHz_77B5",
@@ -159,6 +159,36 @@ const placesData = [
                 pass: "calambacity.2025",
                 info: "Front Of Isla",
                 coords: "10.298196, 123.898235"
+            },
+            {
+                name: "PUSSYCAT BAR",
+                pass: "calambacity.2025",
+                info: "Front Of Isla",
+                coords: "10.298253, 123.898279"
+            },
+            {
+                name: "GFiber_CCE89",
+                pass: "2D34E362",
+                info: "Night Market",
+                coords: "10.299357, 123.899786"
+            },
+            {
+               name: "GlobeAtHome_6CA33",
+               pass: "83B83FFF",
+               info: "Phone RepairShop",
+               coords: "10.2980966, 123.8943361"
+            },
+            {
+                name: "SmartBro_6E9E",
+                pass: "83B83FFF",
+                info: "Inside City Mall",
+                coords: "10.298393, 123.894575"
+            },
+            {
+                name: "JM REPAIR SHOP CEBU",
+                pass: "83B83FFF",
+                info: "Inside City Mall",
+                coords: "10.298409, 123.894502"
             }
         ]
     },
@@ -176,13 +206,13 @@ const placesData = [
                 name: "GFiber_64079",
                 pass: "232EC562",
                 info: "Dhive Near Inayawan Elementary",
-                coords: "10.272249, 123.856555"
+                coords: "10.272286, 123.856533"
             },
             {
                 name: "GFiber_2.4_Converge_A4FB7",
                 pass: "6220C25D",
                 info: "Dhive Near Inayawan Elementary",
-                coords: "10.272249, 123.856555"
+                coords: "10.272263, 123.856435"
             }
         ]
     },
