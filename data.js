@@ -229,6 +229,7 @@ const placesData = [
             }
         ]
     },
+    {
         displayName: "IEC Convention Center Cebu (IC3)",
         actualName: "Luz",
         entries: [
@@ -249,6 +250,7 @@ const placesData = [
              }
         ]
     },
+    {
 
         displayName: "Ayala",
         actualName: "Luz",
@@ -270,8 +272,6 @@ const placesData = [
 
              }
 
-
-
-
-    ]
+        ]
+    },
 ];
